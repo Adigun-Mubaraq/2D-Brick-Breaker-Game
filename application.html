@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="application.css">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        #gamearea {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="gamearea" height="320" width="480">
+    </canvas>
+
+</body>
+<script>
+    canvas = document.getElementById("gamearea");
+    drawings = canvas.getContext("2d");
+    var ArcX = canvas.width/2;
+    var ArcY= canvas.height - 30;
+    var ballradius = 10;
+    drawings.fillStyle = "#0095DD";    // default fillStyle
+    var dx = 2;
+    var dy = -2;
+
+    window.requestAnimationFrame(gameloop);
+
+    function gameloop(){
+        update();    
+        draw();
+        
+        window.requestAnimationFrame(gameloop);
+    }
+
+    function draw(){
+        drawings.clearRect(0,0, canvas.width, canvas.height);
+        collision();
+        drawings.beginPath();
+        drawings.arc(ArcX, ArcY, ballradius, 0, Math.PI*2);
+        drawings.fill();
+        drawings.closePath();
+    }
+    function update(){
+        ArcX += dx;
+        ArcY += dy;
+        
+    }
+    function collision(){
+        if ( ArcX + dx > canvas.width - ballradius || ArcX + dx < ballradius){
+            dx = -dx;
+            drawings.fillStyle = "grey";
+        }
+
+        if (ArcY + dy > canvas.height - ballradius || ArcY + dy < ballradius){
+            dy = -dy;
+            drawings.fillStyle = "#0092DD";
+        }
+    }    
+
+</script>
+
+</html>
