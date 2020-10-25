@@ -9,7 +9,7 @@
     <style>
         body {
             padding: 0;
-            margin: 0;
+            margin-top: 10;
         }
 
         #gamearea {
@@ -30,10 +30,15 @@
     drawings = canvas.getContext("2d");
     var ArcX = canvas.width/2;
     var ArcY= canvas.height - 30;
+    var paddleHeight = 12;
+    var paddleWidth = 65;
+    var paddleX = (canvas.width - paddleWidth) / 2;
+    var paddleY = canvas.height - paddleHeight;
     var ballradius = 10;
-    drawings.fillStyle = "#0095DD";    // default fillStyle
     var dx = 2;
     var dy = -2;
+
+
 
     window.requestAnimationFrame(gameloop);
 
@@ -46,26 +51,39 @@
 
     function draw(){
         drawings.clearRect(0,0, canvas.width, canvas.height);
+        drawball();
+        drawpaddle();
         collision();
+    }
+
+    function drawball(){
         drawings.beginPath();
         drawings.arc(ArcX, ArcY, ballradius, 0, Math.PI*2);
+        drawings.fillStyle ="#0092DD";
         drawings.fill();
         drawings.closePath();
     }
+    function drawpaddle(){
+        drawings.beginPath();
+        drawings.rect(paddleX, paddleY, paddleWidth, paddleHeight);
+        drawings.fillStyle = "#0092DD";
+        drawings.fill();
+        drawings.closePath();
+    }
+
     function update(){
         ArcX += dx;
         ArcY += dy;
         
     }
+
     function collision(){
         if ( ArcX + dx > canvas.width - ballradius || ArcX + dx < ballradius){
             dx = -dx;
-            drawings.fillStyle = "grey";
         }
 
         if (ArcY + dy > canvas.height - ballradius || ArcY + dy < ballradius){
             dy = -dy;
-            drawings.fillStyle = "#0092DD";
         }
     }    
 
