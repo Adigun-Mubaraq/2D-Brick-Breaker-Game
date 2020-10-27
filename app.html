@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="applicatiion.css">
+</head>
+
+<body>
+    <canvas id="gamearea" height="320" width="480">
+    </canvas>
+    <div class="container">
+        <div class="context">
+            <button id="left">
+                MoveLeft
+            </button>
+            <button id="right">
+                MoveRight
+            </button>
+        </div>
+    </div>
+
+    <script>
+        canvas = document.getElementById("gamearea");
+        drawings = canvas.getContext("2d");
+        var paddleHeight = 12;
+        var paddleWidth = 70;
+        var paddleX = (canvas.width - paddleWidth) / 2;
+        var paddleY = canvas.height - paddleHeight;
+        var leftPressed = false;
+        var rightPressed = false;
+
+
+
+        window.requestAnimationFrame(gameloop);
+
+        function gameloop() {
+            draw();
+
+
+            window.requestAnimationFrame(gameloop);
+
+        }
+        function draw() {
+            drawings.clearRect(0, 0, canvas.width, canvas.height);
+            drawpaddle();
+            paddleMovement();
+        }
+        function drawpaddle() {
+            drawings.beginPath();
+            drawings.rect(paddleX, paddleY, paddleWidth, paddleHeight);
+            drawings.fillStyle = "#0092DD";
+            drawings.fill();
+            drawings.closePath();
+        }
+        document.addEventListener("keydown", keyDownHandler);
+        document.addEventListener("keyup", keyUpHandler);
+        function keyDownHandler(event) {
+            if (event.key == "Right" || event.key == "ArrowRight") {
+                rightPressed = true;
+            }
+            else if (event.key == "Left" || event.key == "ArrowLeft") {
+                leftPressed = true;
+            }
+        }
+        function keyUpHandler(event) {
+            if (event.key == "Right" || event.key == "ArrowRight") {
+                rightPressed = false;
+            }
+            else if (event.key == "Left" || event.key == "ArrowLeft") {
+                leftPressed = false;
+            }
+        }
+        function paddleMovement() {
+            if (rightPressed) {
+                paddleX += 5;
+            }
+            else if (leftPressed) {
+                paddleX -= 5;
+            }
+
+        }
+
+    </script>
+
+</html>

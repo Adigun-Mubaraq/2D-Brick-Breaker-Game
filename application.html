@@ -5,65 +5,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="application.css">
-    <style>
-        body {
-            padding: 0;
-            margin-top: 10;
-        }
-
-        #gamearea {
-            background: #eee;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
+    <link rel="stylesheet" href="applicatiion.css">
 </head>
 
 <body>
     <canvas id="gamearea" height="320" width="480">
     </canvas>
-
 </body>
 <script>
     canvas = document.getElementById("gamearea");
     drawings = canvas.getContext("2d");
-    var ArcX = canvas.width/2;
-    var ArcY= canvas.height - 30;
+    var ArcX = canvas.width / 2;
+    var ArcY = canvas.height - 30;
     var paddleHeight = 12;
-    var paddleWidth = 65;
+    var paddleWidth = 70;
     var paddleX = (canvas.width - paddleWidth) / 2;
     var paddleY = canvas.height - paddleHeight;
     var ballradius = 10;
-    var dx = 2;
-    var dy = -2;
+    var dx = 4;
+    var dy = -4;
+    var leftPressed = false;
+    var rightPressed = false;
+
+
 
 
 
     window.requestAnimationFrame(gameloop);
 
-    function gameloop(){
-        update();    
+    function gameloop() {
+        update();
         draw();
-        
+
         window.requestAnimationFrame(gameloop);
     }
 
-    function draw(){
-        drawings.clearRect(0,0, canvas.width, canvas.height);
+    function draw() {
+        drawings.clearRect(0, 0, canvas.width, canvas.height);
         drawball();
         drawpaddle();
         collision();
+        paddleMovement();
     }
 
-    function drawball(){
+    function drawball() {
         drawings.beginPath();
-        drawings.arc(ArcX, ArcY, ballradius, 0, Math.PI*2);
-        drawings.fillStyle ="#0092DD";
+        drawings.arc(ArcX, ArcY, ballradius, 0, Math.PI * 2);
+        drawings.fillStyle = "#0092DD";
         drawings.fill();
         drawings.closePath();
     }
-    function drawpaddle(){
+    function drawpaddle() {
         drawings.beginPath();
         drawings.rect(paddleX, paddleY, paddleWidth, paddleHeight);
         drawings.fillStyle = "#0092DD";
@@ -71,22 +63,64 @@
         drawings.closePath();
     }
 
-    function update(){
+    function update() {
         ArcX += dx;
         ArcY += dy;
-        
+
     }
 
-    function collision(){
-        if ( ArcX + dx > canvas.width - ballradius || ArcX + dx < ballradius){
+    function collision() {
+        if (ArcX + dx > canvas.width - ballradius || ArcX + dx < ballradius) {
             dx = -dx;
         }
 
-        if (ArcY + dy > canvas.height - ballradius || ArcY + dy < ballradius){
+        if (ArcY + dy < ballradius) {
             dy = -dy;
         }
-    }    
+        else if (ArcY + dy > canvas.height - ballradius) {
+            if (ArcX > paddleX && ArcX < paddleX + paddleWidth) {
+                dy = -dy;
+            }
+            else {
+            alert("GAME OVER");
+            window.location.reload()
+        }
+        }
 
+    }
+    window.addEventListener("keydown", keyDownHandler);
+    window.addEventListener("keyup", keyUpHandler);
+    function keyDownHandler(event) {
+        if (event.key == "Right" || event.key == "ArrowRight") {
+            rightPressed = true;
+        }
+        else if (event.key == "Left" || event.key == "ArrowLeft") {
+            leftPressed = true;
+        }
+    }
+    function keyUpHandler(event) {
+        if (event.key == "Right" || event.key == "ArrowRight") {
+            rightPressed = false;
+        }
+        else if (event.key == "Left" || event.key == "ArrowLeft") {
+            leftPressed = false;
+        }
+    }
+    function paddleMovement() {
+        if (rightPressed) {
+            paddleX += 5;
+            if (paddleWidth + paddleX > canvas.width) {
+                paddleX = canvas.width - paddleWidth;
+            }
+        }
+        else if (leftPressed) {
+            paddleX -= 5;
+            if (paddleX < 0) {
+                paddleX = 0;
+            }
+        }
+
+    }
 </script>
 
 </html>
